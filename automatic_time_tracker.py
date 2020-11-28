@@ -21,22 +21,18 @@ try:
         bob = GetWindowText(GetForegroundWindow())
         if bob == bob2 and first:
             start = datetime.datetime.now()
-            print(start)
+            #print(start)
             timelist.append(start)
+
             first = False
-        #if bob != bob2 and not first:
-            #stop = datetime.datetime.now()
-            #timelist.append(stop)
-            #print(stop)
-            #first = True
-            #break
+
         if bob != bob2 and not first:
             stop = datetime.datetime.now()
             timelist.append(stop)
-            print(stop)
-            print("hello")
+            ovarall_time = stop - start
+            print(ovarall_time)
             active_window_name.append(GetWindowText(GetForegroundWindow()))
-            print(active_window_name)
+            print(GetWindowText(GetForegroundWindow()) +": " + str(ovarall_time))
             first = True
         
 
@@ -44,4 +40,4 @@ except KeyboardInterrupt:
     stop = datetime.datetime.now()
     timelist.append(stop)
     print(stop)
-    print("OOPs")
+    print(timelist)
