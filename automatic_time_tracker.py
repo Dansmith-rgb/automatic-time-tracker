@@ -1,7 +1,7 @@
 from win32gui import GetWindowText, GetForegroundWindow
 import os
 import selenium
-import plotly
+from plotly import offline
 import subprocess
 import time
 import datetime
@@ -14,30 +14,51 @@ stop = datetime.datetime.now()
 start = datetime.datetime.now()
 timelist = []
 try:
-    #bob2 = GetWindowText(GetForegroundWindow())
     while True:
-        #active_window_name.append(GetWindowText(GetForegroundWindow()))
         bob2 = GetWindowText(GetForegroundWindow())
         bob = GetWindowText(GetForegroundWindow())
         if bob == bob2 and first:
             start = datetime.datetime.now()
-            #print(start)
-            timelist.append(start)
-
             first = False
 
         if bob != bob2 and not first:
             stop = datetime.datetime.now()
-            timelist.append(stop)
             ovarall_time = stop - start
+            timelist.append(str(ovarall_time))
             print(ovarall_time)
             active_window_name.append(GetWindowText(GetForegroundWindow()))
-            print(GetWindowText(GetForegroundWindow()) +": " + str(ovarall_time))
+            text = print(GetWindowText(GetForegroundWindow()))
+            if text == "":
+                print("Couldn't get data")
+
             first = True
         
 
 except KeyboardInterrupt:
     stop = datetime.datetime.now()
-    timelist.append(stop)
+    ovarall_time = stop - start
+    timelist.append(str(ovarall_time))
     print(stop)
     print(timelist)
+
+    def graph_data(active_window_name, timelist):
+        data = [{
+            'type': 'bar',
+            'x': active_window_name,
+            'y': timelist,
+            'marker': {
+                'color': 'rgb(0, 100, 0)',
+            }
+        }]
+
+        my_layout = {
+            'title': 'time on applications',
+            'xaxis': {'title': 'applications'},
+            'yaxis': {'title': 'time'}
+        }
+
+        fig = {'data': data, 'layout': my_layout}
+        offline.plot(fig, filename='application_data.html')
+    graph_data(active_window_name, timelist)
+
+
